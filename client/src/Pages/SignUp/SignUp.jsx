@@ -13,15 +13,17 @@ class ErrorBoundary extends React.Component {
     this.state = { hasError: false };
   }
 
+  // Static method to update state based on error
   static getDerivedStateFromError(error) {
     return { hasError: true };
   }
 
+  // Lifecycle method to catch errors and log them
   componentDidCatch(error, errorInfo) {
-    // You can log the error to an error reporting service
     console.error('Error caught by ErrorBoundary:', error, errorInfo);
   }
 
+  // Render method to display error message if an error occurred
   render() {
     if (this.state.hasError) {
       return (
@@ -35,9 +37,11 @@ class ErrorBoundary extends React.Component {
   }
 }
 
+// SignUp functional component
 export const SignUp = () => {
+  // State variables for form data, errors, and submission status
   const [formData, setFormData] = useState({
-    fullName: '', // Updated from 'userName'
+    fullName: '',
     email: '',
     referralCode: '',
     verificationCode: '',
@@ -47,14 +51,17 @@ export const SignUp = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Event handler for input changes in the form
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    // Update form data using previous state to avoid race conditions
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
-    });
+    }));
   };
 
+  // Event handler to get verification code
   const handleGetCode = async () => {
     try {
       // Call the backend API to send the verification code to the provided email
@@ -68,9 +75,9 @@ export const SignUp = () => {
     }
   };
 
+  // Event handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const newErrors = {};
 
     // General check for empty fields
@@ -117,9 +124,25 @@ export const SignUp = () => {
       setIsSubmitting(true);
 
       try {
+        // Check if email or name already exists in local storage
+        const storedSignupDetails = localStorage.getItem('signupDetails');
+        if (storedSignupDetails) {
+          const existingSignupDetails = JSON.parse(storedSignupDetails);
+
+          // Check for existing name
+          if (existingSignupDetails.fullName === formData.fullName) {
+            newErrors.fullName = 'Full name already exists. Please choose a different full name.';
+          }
+
+          // Check for existing email
+          if (existingSignupDetails.email === formData.email) {
+            newErrors.email = 'Email already exists. Please use a different email address.';
+          }
+        }
+
         // Check if username or email already exist in the database using Axios
         const response = await axios.post('YOUR_BACKEND_API_CHECK_EXISTENCE_ENDPOINT', {
-          userName: formData.fullName, // Updated from 'userName'
+          userName: formData.fullName,
           email: formData.email,
         });
 
@@ -128,7 +151,7 @@ export const SignUp = () => {
 
         // Check for existing username
         if (data.usernameExists) {
-          newErrors.fullName = 'Full name already exists. Please choose a different full name.'; // Updated from 'userName'
+          newErrors.fullName = 'Full name already exists. Please choose a different full name.';
         }
 
         // Check for existing email
@@ -144,6 +167,7 @@ export const SignUp = () => {
 
       if (Object.keys(newErrors).length === 0) {
         try {
+          localStorage.setItem('signupDetails', JSON.stringify(formData));
           // Sending registration details to the backend using Axios
           const registrationResponse = await axios.post('YOUR_BACKEND_API_REGISTRATION_ENDPOINT', formData);
 
@@ -163,6 +187,24 @@ export const SignUp = () => {
     }
   };
 
+  // Function to render error alerts
+  const renderAlerts = () => {
+    return (
+      <Stack sx={{ width: '100%', marginTop: '16px', maxWidth: '310px' }} spacing={2}>
+        {Object.keys(errors).map((key) => (
+          <Alert
+            key={key}
+            sx={{ backgroundColor: 'white' }}
+            severity="error"
+          >
+            {errors[key]}
+          </Alert>
+        ))}
+      </Stack>
+    );
+  };
+
+  // Return JSX for the SignUp component
   return (
     <ErrorBoundary>
       <div className='Login'>
@@ -172,17 +214,7 @@ export const SignUp = () => {
               <h2>Register</h2>
               <p>Please enter your details to create an account</p>
             </div>
-            <Stack sx={{ width: '100%', marginTop: '16px', maxWidth: '310px' }} spacing={2}>
-              {Object.keys(errors).map((key) => (
-                <Alert
-                  key={key}
-                  sx={{ backgroundColor: 'white' }}
-                  severity="error"
-                >
-                  {errors[key]}
-                </Alert>
-              ))}
-            </Stack>
+            {renderAlerts()}
             <div className='input-box'>
               <VerifiedUserRounded className='icon'/>
               <input

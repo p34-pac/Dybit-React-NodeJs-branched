@@ -5,6 +5,7 @@ import { EmailRounded, Visibility, VisibilityOff } from '@mui/icons-material';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { Link } from 'react-router-dom';
+import axios from 'axios'; // Import axios for making HTTP requests
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -32,18 +33,32 @@ const Login = () => {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const isEmailValid = validateEmail();
     const isPasswordValid = validatePassword();
 
     if (isEmailValid && isPasswordValid) {
-      // Perform your login logic here
-      console.log('Login successful');
-      // Redirect to the home page after successful login
-      history.push('/');
-      // You can define the '/home' route in your React Router setup
+      try {
+        // Check if the user email exists in the backend database
+        const response = await axios.post('YOUR_BACKEND_API_CHECK_EXISTENCE_ENDPOINT', {
+          email: email,
+        });
+
+        const data = response.data;
+
+        if (data.emailExists) {
+          // Perform your login logic here if the email exists
+          console.log('Login successful');
+          // Redirect to the home page after successful login
+          history.push('/');
+        } else {
+          console.log('Login failed. Email does not exist in the database.');
+        }
+      } catch (error) {
+        console.error('Error checking email existence:', error.message);
+      }
     } else {
       console.log('Login failed. Please check your input.');
     }
@@ -106,7 +121,7 @@ const Login = () => {
             </label>
             <a href='#'> Forgot password.?</a>
           </div>
-          <button type='submit' class="bg-white text-black font-bold py-2 px-4 rounded-full">Login</button>
+          <button type='submit' className="bg-white text-black font-bold py-2 px-4 rounded-full">Login</button>
           <div className='register-link'>
             <p>
               Don't have an account? <Link to="/Register">Register</Link>
