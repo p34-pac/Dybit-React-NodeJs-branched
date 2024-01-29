@@ -169,7 +169,7 @@ export const SignUp = () => {
         try {
           localStorage.setItem('signupDetails', JSON.stringify(formData));
           // Sending registration details to the backend using Axios
-          const registrationResponse = await axios.post('YOUR_BACKEND_API_REGISTRATION_ENDPOINT', formData);
+          const registrationResponse = await axios.post('http://localhost:3001/api/register', formData);
 
           // Handles the response from the backend
           if (registrationResponse.status === 200) {
