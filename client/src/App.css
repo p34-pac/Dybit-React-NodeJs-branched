@@ -15,4 +15,11 @@ body {
   width: 100vw;
   height: 100vh;
   background: #949292;
+
+}
+
+
+/* remove the scroll bar from showing but scrolling still works */
+::-webkit-scrollbar{
+  display: none;
 }

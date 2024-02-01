@@ -1,0 +1,174 @@
+:root{
+    --primary-text-color: #212529;
+    --secondary-text-color: #343536;
+    --primary-bg-color: black;
+    --secondary-bg-color: #464646;
+}
+
+.profile-cover{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+/* user info styling */
+.user-info {
+    width: fit-content;
+    height: fit-content;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.user-profile-image{
+    width: 150px;
+    height: 150px;
+    padding: 20px;
+    background-color: var(--primary-bg-color);
+    border-radius: 50%;
+}
+.user-profile-image svg{
+    width: 100%;
+    height: 100%;
+}
+.info-context{
+    width: fit-content;
+    height: fit-content;
+    margin-left: 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 30px;
+}
+.info-context>b.userName{
+    font-size: 20px;
+    color: var(--primary-text-color);
+}
+.info-context>b.userEmail{
+    font-size: 15px;
+    color: var(--primary-text-color);
+    
+}
+.info-context>b.userEmail:hover{
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    cursor: pointer;
+}
+/* -------------------------- */
+/* account context styling */
+.account-context{
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    margin-right: 20px;
+    position: relative;
+}
+ .account-context .current-level{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+ .account-context .current-level i{
+    padding: 10px;
+    font-weight: 900;
+    color: var(--secondary-text-color);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2px;
+    font-style: normal;
+}
+ .account-context .current-level b{
+    content: ' ';
+    font-weight: 500;
+    color: var(--primary-text-color);
+}
+ .account-context .current-level svg{
+    zoom: 5%;
+}
+
+
+/* ------------------------ */
+
+
+
+
+@media screen and (max-width: 550px) {
+    .profile-cover{
+        align-items: flex-start;
+    }
+    .user-info {
+        width: fit-content;
+        height: fit-content;
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .user-info {
+        align-items: flex-start;
+    }
+    .user-profile-image{
+        width: 100px;
+        height: 100px;
+    }
+    .info-context{
+        justify-content: flex-start;
+        gap: 10px;
+    }
+    .account-context{
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+
+    }
+
+}
+@media screen and (max-width: 350px) {
+    .user-info {
+        width: 100%;
+        height: fit-content;
+        margin: auto;
+        margin-left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+    }
+    .user-profile-image{
+        margin: auto;
+    }
+    .user-profile-image{
+        width: 150px;
+        height: 150px;
+        padding: 20px;
+        background-color: var(--primary-bg-color);
+        border-radius: 50%;
+    }
+    .info-context{
+        width: fit-content;
+        height: fit-content;
+        margin-left: 0px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .account-context{
+        width: fit-content;
+        height: fit-content;
+        padding: 10px;
+        margin: auto;
+        position: relative;
+    }
+}

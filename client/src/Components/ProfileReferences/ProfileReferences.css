@@ -1,0 +1,38 @@
+.Profile-references{
+    width: 85%;
+    height: fit-content;
+    margin: auto;
+    margin: 50px auto;
+
+}
+.Profile-references h1{
+    font-size: 20px;
+    font-weight: bolder;
+    color: black;
+}
+.Profile-references .ref-card-container{
+    width: 100%;
+    padding: 5px 50px;
+    border-radius: 10px;
+    border: 1px solid #e6c918;
+    height: fit-content;
+    background-color: #fff8e1ce;
+
+}
+.Profile-references>*:not(:first-child){
+    margin-top: 10px;
+}
+@media screen and (max-width: 400px) {
+    .Profile-references{
+        width: 90%;
+    }
+    .Profile-references .ref-card-container{
+        width: 100%;
+        padding: 5px 10px;
+        border-radius: 10px;
+        border: 1px solid #e6c918;
+        height: fit-content;
+        background-color: #fff8e1ce;
+    
+    }
+}
