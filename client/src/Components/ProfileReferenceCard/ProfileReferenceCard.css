@@ -1,0 +1,54 @@
+/* max-width: 100%; */
+/* width: 100%; */
+.profile-reference-card{
+    width: calc(90%-50px);
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    cursor: pointer;
+}
+.profile-reference-card .ICN-nxt{
+    width: 15px;
+    height: 15px;
+    justify-self: flex-end;
+}
+.profile-reference-card .ICN-nxt svg{
+    width: 100%;
+    height: 100%;
+
+}
+.profile-reference-card:not(:last-child){
+    border-bottom: 1px solid #e6c918;
+
+}
+.profile-reference-card .ref-content{
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.profile-reference-card .ref-content .icon{
+    /* zoom: 7%; */
+    margin-right: 10px;
+}
+.profile-reference-card .ref-content .icon svg{
+    max-width: 30px;
+    max-height: 30px;
+}
+.profile-reference-card .ref-content .context{
+    margin-left: 10px;
+    color: black;
+}
+
+.profile-reference-card .ref-content .context b{
+    text-transform: capitalize;
+}
+
+@media screen and (max-width: 400px) {
+    .profile-reference-card{
+        width: 98%;
+    }
+}
