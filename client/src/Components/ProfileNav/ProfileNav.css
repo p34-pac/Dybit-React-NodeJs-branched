@@ -1,0 +1,93 @@
+.profile-nav{
+    width: 100%;
+    height: fit-content;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(230, 201, 24, 1);
+
+}
+/* tier */
+.tier-btn{
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 50px;
+}
+.tier-btn button{
+    border: none;
+    outline: none;
+    cursor: pointer;
+    margin-right: 5px;
+}
+/* ----------- */
+/* balance section */
+.balance{
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 20px;
+}
+
+.Balance-hider{
+    padding: 5px 10px;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+.Hider-btn{
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    color: #d7d7d7;
+    font-size: 17px;
+    font-weight: 500;
+}
+/* ------------------ */
+
+
+@media screen and (max-width: 550px) {
+    .Hider-btn{
+        width: fit-content;
+        height: fit-content;
+        font-size: 3.5dvw;
+        font-weight: bolder;
+    }
+    .tier-btn{
+        margin-left: 20px;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .tier-btn{
+        font-size: 4.5dvw;
+        margin-left: 10px;
+    }
+    .tier-btn svg{
+        zoom: 70%;
+    }
+    .balance{
+        font-size: 4dvw;
+        margin-right: 10px;
+    }
+    .Balance-hider{
+        padding: 5px;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+        margin-left: 10px;
+        font-size: 4.5dvw;
+    }
+}

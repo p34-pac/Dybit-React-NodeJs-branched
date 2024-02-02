@@ -1,0 +1,43 @@
+.statistic-card{
+    width: fit-content;
+    min-width: 100px;
+    max-width: 200px;
+    height: fit-content;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border: 1px solid #e6c918;
+    background-color: #fff8e1ce;
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    cursor: pointer;
+}
+.statistic-card .icon{
+    margin-right: 10px;
+}
+.statistic-card .icon svg{
+    width: 30px;
+    height: 30px;
+}
+.statistic-card .context{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    color: #343536;
+}
+
+@media screen and (max-width: 600px) {
+    .statistic-card{
+        font-size: 2.5dvw;
+        max-width: fit-content;
+    }
+}
+@media screen and (max-width: 400px) {
+    .statistic-card{
+        font-size: 15px;
+        max-width: 100%;
+        width: 100%;
+    }
+}

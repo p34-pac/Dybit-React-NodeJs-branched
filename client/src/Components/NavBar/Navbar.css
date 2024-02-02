@@ -9,6 +9,7 @@
     padding: 0px 20px;
     background: #fff;
     box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    z-index: 5;
 }
 .Nav{
     display: flex;
@@ -65,3 +66,4 @@
         font-size: 25px;
     } 
 }
+
