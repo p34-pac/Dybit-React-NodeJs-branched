@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
   fullName: String,
   email: String,
   referralCode: String,
-  verificationCode: String,
+  verificationCode: Number,
   password: String,
 });
 

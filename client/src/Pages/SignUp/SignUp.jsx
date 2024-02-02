@@ -23,7 +23,7 @@ class ErrorBoundary extends React.Component {
     console.error('Error caught by ErrorBoundary:', error, errorInfo);
   }
 
-  // Render method to display error message if an error occurred
+  // Render method to display an error message if an error occurred
   render() {
     if (this.state.hasError) {
       return (
@@ -39,7 +39,7 @@ class ErrorBoundary extends React.Component {
 
 // SignUp functional component
 export const SignUp = () => {
-  // State variables for form data, errors, and submission status
+  // State variables for form data, errors, submission status, and error message
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -50,6 +50,7 @@ export const SignUp = () => {
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   // Event handler for input changes in the form
   const handleInputChange = (e) => {
@@ -61,7 +62,7 @@ export const SignUp = () => {
     }));
   };
 
-  // Event handler to get verification code
+  // Event handler to get the verification code
   const handleGetCode = async () => {
     try {
       // Call the backend API to send the verification code to the provided email
@@ -124,24 +125,8 @@ export const SignUp = () => {
       setIsSubmitting(true);
 
       try {
-        // Check if email or name already exists in local storage
-        const storedSignupDetails = localStorage.getItem('signupDetails');
-        if (storedSignupDetails) {
-          const existingSignupDetails = JSON.parse(storedSignupDetails);
-
-          // Check for existing name
-          if (existingSignupDetails.fullName === formData.fullName) {
-            newErrors.fullName = 'Full name already exists. Please choose a different full name.';
-          }
-
-          // Check for existing email
-          if (existingSignupDetails.email === formData.email) {
-            newErrors.email = 'Email already exists. Please use a different email address.';
-          }
-        }
-
-        // Check if username or email already exist in the database using Axios
-        const response = await axios.post('YOUR_BACKEND_API_CHECK_EXISTENCE_ENDPOINT', {
+        // Check if username or email already exists in the database using Axios
+        const response = await axios.post('http://localhost:3001/api/register', {
           userName: formData.fullName,
           email: formData.email,
         });
@@ -152,37 +137,40 @@ export const SignUp = () => {
         // Check for existing username
         if (data.usernameExists) {
           newErrors.fullName = 'Full name already exists. Please choose a different full name.';
+          setErrorMessage(newErrors.fullName); // Set error message in the state
         }
 
         // Check for existing email
         if (data.emailExists) {
           newErrors.email = 'Email already exists. Please use a different email address.';
+          setErrorMessage(newErrors.email); // Set error message in the state
+        }
+
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length === 0) {
+          try {
+            // Sending registration details to the backend using Axios
+            const registrationResponse = await axios.post('http://localhost:3001/api/register', formData);
+
+            // Handles the response from the backend
+            if (registrationResponse.status === 200) {
+              console.log('Registration successful:', registrationResponse.data);
+            } else {
+              console.error('Registration failed:', registrationResponse.statusText);
+              setErrors({ registration: registrationResponse.data.error });
+            }
+          } catch (error) {
+            // Handle network or other errors during registration
+            console.error('Error during registration:', error.message);
+            setErrorMessage("Error during registration:");
+          } finally {
+            setIsSubmitting(false);
+          }
         }
       } catch (error) {
         // Handle network or other errors during username and email existence check
-        console.error('Error during username and email existence check:', error.message);
-      }
-
-      setErrors(newErrors);
-
-      if (Object.keys(newErrors).length === 0) {
-        try {
-          localStorage.setItem('signupDetails', JSON.stringify(formData));
-          // Sending registration details to the backend using Axios
-          const registrationResponse = await axios.post('http://localhost:3001/api/register', formData);
-
-          // Handles the response from the backend
-          if (registrationResponse.status === 200) {
-            console.log('Registration successful:', registrationResponse.data);
-          } else {
-            console.error('Registration failed:', registrationResponse.statusText);
-          }
-        } catch (error) {
-          // Handle network or other errors during registration
-          console.error('Error during registration:', error.message);
-        } finally {
-          setIsSubmitting(false);
-        }
+        setErrorMessage('An error occurred during registration. Please try again.'); // Set error message in the state
       }
     }
   };
@@ -191,6 +179,11 @@ export const SignUp = () => {
   const renderAlerts = () => {
     return (
       <Stack sx={{ width: '100%', marginTop: '16px', maxWidth: '310px' }} spacing={2}>
+        {errorMessage && (
+          <Alert sx={{ backgroundColor: 'white' }} severity="error">
+            {errorMessage}
+          </Alert>
+        )}
         {Object.keys(errors).map((key) => (
           <Alert
             key={key}
