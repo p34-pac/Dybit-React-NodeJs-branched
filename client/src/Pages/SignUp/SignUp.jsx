@@ -161,7 +161,7 @@ export const SignUp = () => {
               setErrors({ registration: registrationResponse.data.error });
             }
           } catch (error) {
-            // Handle network or other errors during registration
+            // Handles network or other errors during registration
             console.error('Error during registration:', error.message);
             setErrorMessage("Error during registration:");
           } finally {
