@@ -1,0 +1,12 @@
+.tasks{
+    width: 100%;
+    height: fit-content;
+    margin-top: 60px;
+}
+.tasks-list{
+    width: 95%;
+    height: fit-content;
+    margin: auto;
+    /* background-color: aqua; */
+
+}
