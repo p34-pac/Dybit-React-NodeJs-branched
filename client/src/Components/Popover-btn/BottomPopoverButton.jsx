@@ -21,8 +21,8 @@ const BottomPopoverButton = () => {
           <div className='div-line'>.</div>
           <Link to="/dashboard" className='nav-toggler-links'><Dashboard className='link-icons'/> Dashboard</Link>
           <Link to="/profile" className='nav-toggler-links'><FaUser  className='link-icons'/> Profile</Link>
-          <Link to="/profile" className='nav-toggler-links'><FaRing className='link-icons'/>Tasks center</Link>
-          <Link to="/profile" className='nav-toggler-links'><People className='link-icons'/>Contact Us</Link>
+          <Link to="/tasks" className='nav-toggler-links'><FaRing className='link-icons'/>Tasks center</Link>
+          <Link to="/contacts" className='nav-toggler-links'><People className='link-icons'/>Contact Us</Link>
           <button className='Login-Logout-btn'>Logout</button>
         </div>
       )}
