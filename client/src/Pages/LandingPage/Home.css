@@ -1,0 +1,46 @@
+.landing{
+    background: #e6c918;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.landing h1{
+    width: fit-content;
+    height: fit-content;
+    font-size: 30px;
+    font-weight: bolder;
+    margin-bottom: 50px;
+}
+
+.landing .access{
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.access .access-btn{
+    width: fit-content;
+    height: fit-content;
+    padding: 1px 30px;
+    background-color: #000;
+    color: whitesmoke;
+    font-weight: bolder;
+    font-size: 20px;
+    border-radius: 10px;
+}
+.access a{
+    width: fit-content;
+    height: fit-content;
+    display: block;
+    font-size: larger;
+    padding: 2px 0;
+    padding-bottom: 5px;
+}
+
+.access-btn:not(:first-child){
+    margin-left: 20px;
+}
