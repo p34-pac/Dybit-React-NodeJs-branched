@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
 import './Home.css'
+import { Link } from 'react-router-dom'
+
 
 function Home() {
   return (
@@ -9,14 +11,14 @@ function Home() {
 
       <section className='access'>
         <div className='access-btn'>
-          <a href='#'>
+          <Link to="/register">
             <button className='signup-btn'>Sign Up</button>
-          </a>
+          </Link>
         </div>
         <div className='access-btn'>
-          <a href='#'>
+          <Link to="/login">
             <button className='signin-btn'>Sign In</button>
-          </a>
+          </Link>
         </div>
       </section>
     </main>
