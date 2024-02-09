@@ -1,11 +1,11 @@
+//models/Dybit.js
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-  fullName: String,
-  email: String,
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   referralCode: String,
-  verificationCode: Number,
-  password: String,
+  password: { type: String, required: true },
 });
 
 const User = mongoose.model('User', userSchema);
