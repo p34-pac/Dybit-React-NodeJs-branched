@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios"
 
+
 // SignUp functional component
 export const SignUp = () => {
   const navigate = useNavigate();

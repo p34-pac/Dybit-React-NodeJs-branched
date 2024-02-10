@@ -1,6 +1,8 @@
 // const express = require('express');
 const User = require("../models/Dybit")
 const { hashPassword, comparePassword } = require("../helpers/auth");
+const jwt = require('jsonwebtoken')
+
 
 const test = (req, res) => {
    res.json('test is working')
@@ -54,15 +56,51 @@ const loginUser = async (req, res) => {
         //check for password match
         const match = await comparePassword(password, user.password)
         if (match) {
-           res.json('password matched') 
+            jwt.sign({ email: user.email, id: user._id, name: user.name }, process.env.JWT_SECRET, {}, (err, token) => {
+                if (err) throw err;
+                res.cookie('token', token).json(user)
+           })
         }
+        if (!match) {
+            res.json({
+                error: 'password do not match'
+            }) 
+         }
     } catch (error) {
         console.log(error)
     }
 }
 
+const getProfile = (req, res) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(400).json({ error: "Token is missing" });
+    }
+    
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) {
+            console.error("JWT verification error:", err);
+            return res.status(401).json({ error: "Invalid token" });
+        }
+        
+        User.findById(user.id, (err, userDoc) => {
+            if (err) {
+                console.error("Error finding user:", err);
+                return res.status(500).json({ error: "Server error" });
+            }
+            
+            if (!userDoc) {
+                return res.status(404).json({ error: "User not found" });
+            }
+            
+            res.json(userDoc);
+        });
+    });
+}
+
 module.exports = {
     test,
     registerUser,
-    loginUser
+    loginUser,
+    getProfile
 }

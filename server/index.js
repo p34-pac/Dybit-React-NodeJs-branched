@@ -2,6 +2,10 @@ const express = require('express');
 const dotenv = require("dotenv").config();
 const cors = require("cors");
 const { mongoose } = require("mongoose")
+const cookieParser = require('cookie-parser')
+
+
+
 const app = express();
 
 mongoose.connect(process.env.MONGOOSE_URL)
@@ -9,7 +13,10 @@ mongoose.connect(process.env.MONGOOSE_URL)
   .catch(() => console.log("Databse not connected"))
 
 // middleware
-app.use(express.json())
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
+
 
 
 
