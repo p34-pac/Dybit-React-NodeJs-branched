@@ -25,7 +25,7 @@ const Login = () => {
     // axios.get("http://localhost:3000/")
     const { email, password } = data;
     try {
-      const { data } = await axios.post('http://localhost:3000/login', {
+      const { data } = await axios.post('/login', {
         email, password
       })
       if (data.error) {

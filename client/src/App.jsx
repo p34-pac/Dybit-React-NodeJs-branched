@@ -6,16 +6,16 @@ import Dashboard from "./Pages/Dashboard/Dashboard"
 import Profile from './Pages/Profile/Profile';
 import Tasks from './Pages/Tasks/Tasks';
 import Home from './Pages/LandingPage/Home';
-// import axios from "axios";
+import axios from "axios";
 import {Toaster} from "react-hot-toast"
 import { UserContextProvider } from '../context/userContext';
-// axios.defaults.baseURL = 'http://localhost:3000';
-// axios.defaults.withCredentials = true
+axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.withCredentials = true
 
 function App() {
   return (
   <UserContextProvider>
-    <Toaster position="top-right" toastOptions={{ duration: 4000 }}/> 
+    <Toaster position="top-right" toastOptions={{ duration: 2000 }}/> 
     <BrowserRouter>
       <Routes>
         <Route path='/' exact element={<Home />} />

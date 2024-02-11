@@ -1,75 +1,111 @@
-// const express = require('express');
-const User = require("../models/Dybit")
+//authControllers.js
+const User = require("../models/Dybit");
 const { hashPassword, comparePassword } = require("../helpers/auth");
-const jwt = require('jsonwebtoken')
-
+const jwt = require('jsonwebtoken');
 
 const test = (req, res) => {
-   res.json('test is working')
-}
+   res.json('test is working');
+};
+// Generate Referral Link
+const generateReferralLink = async () => {
+    let referralLink;
+    do {
+        const referralCode = Math.random().toString(36).substring(7);
+        referralLink = `http://localhost:3000/register?ref=${referralCode}`;
+        const existingUser = await User.findOne({ referralLink });
+        if (!existingUser) {
+            break;
+        }
+    } while (true);
+    return referralLink;
+};
 
 const registerUser = async (req, res) => {
     try {
-        const { name, email,referralCode, password } = req.body;
-        //check if name was entered or not
-        if (!name) {
-            return res.json({
-                error: "Name is required"
-            })
+        const { name, email, password, referralCode } = req.body;
+        if (!name || !email || !password) {
+            return res.status(400).json({ error: "Name, email, and password are required" });
         }
-        //check if password is good
-        if (!password || password.length < 6) {
-            return res.json({
-                error: "Password is required and should be at least 6 characters long"
-            })
+        if (password.length < 6) {
+            return res.status(400).json({ error: "Password should be at least 6 characters long" });
         }
-        const hashedPassword = await hashPassword(password)
-        const exist = await User.findOne({ email });
-        if (exist) {
-            return res.json({
-                error: "Email already exist"
-            })
+        const hashedPassword = await hashPassword(password);
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ error: "Email already exists" });
         }
+        const referralLink = referralCode ? `http://localhost:3000/register?ref=${referralCode}` : await generateReferralLink();
         const user = await User.create({
-            name, email, referralCode, password: hashedPassword,
-        })
-        return res.json(user)
+            name,
+            email,
+            password: hashedPassword,
+            referralLink,
+            balance: 0 // user balance is set to zero
+        });
+        return res.status(201).json(user);
     } catch (error) {
-        console.error(error); // Log the error for debugging purposes
-        return res.status(500).json({ error: "Server error" }); // Return a generic server error message
+        console.error(error);
+        return res.status(500).json({ error: "Server error" });
     }
-}
+};
 
-// login endpoint
+const trackReferral = async (referralCode, referredUserId) => {
+    try {
+        const referrer = await User.findOne({ referralCode });
+        if (referrer) {
+            referrer.referredUsers.push(referredUserId);
+            await referrer.save();
+        }
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+const rewardReferrer = async (referralCode) => {
+    try {
+        const referrer = await User.findOne({ referralCode });
+        if (referrer) {
+            referrer.balance += 1; // Reward the referrer with $1
+            await referrer.save();
+        }
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 const loginUser = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, referralCode } = req.body;
+        const user = await User.findOne({ email });
 
-        //check if user exist
-        const user = await User.findOne({ email }) 
         if (!user) {
             return res.json({
-                error: "No user found. please enter the correct email"
-            })
+                error: "No user found. Please enter the correct email."
+            });
         }
 
-        //check for password match
-        const match = await comparePassword(password, user.password)
+        const match = await comparePassword(password, user.password);
+
         if (match) {
+            if (referralCode) {
+                await trackReferral(referralCode, user._id);
+                await rewardReferrer(referralCode);
+            }
+
             jwt.sign({ email: user.email, id: user._id, name: user.name }, process.env.JWT_SECRET, {}, (err, token) => {
                 if (err) throw err;
-                res.cookie('token', token).json(user)
-           })
-        }
-        if (!match) {
+                res.cookie('token', token).json(user);
+            });
+        } else {
             res.json({
-                error: 'password do not match'
-            }) 
-         }
+                error: 'Password does not match'
+            });
+        }
     } catch (error) {
-        console.log(error)
+        console.error(error);
+        return res.status(500).json({ error: "Server error" });
     }
-}
+};
 
 const getProfile = (req, res) => {
     const token = req.cookies.token;
@@ -96,11 +132,11 @@ const getProfile = (req, res) => {
             res.json(userDoc);
         });
     });
-}
+};
 
 module.exports = {
     test,
     registerUser,
     loginUser,
     getProfile
-}
+};

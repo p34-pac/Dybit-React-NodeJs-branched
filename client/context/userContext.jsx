@@ -11,7 +11,7 @@ export const UserContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserData = async () => {
         try {
-        const response = await axios.get('http://localhost:3000/profile');
+        const response = await axios.get('/profile');
         setUser(response.data);
       } catch (error) {
         console.error('Error fetching user data:', error);

@@ -1,50 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { EmailRounded, FaceRetouchingNaturalRounded, VerifiedUserRounded, VisibilityOff, Visibility } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import '../Login/LogStyles.css';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import axios from "axios"
+import axios from "axios";
 
-
-// SignUp functional component
 export const SignUp = () => {
   const navigate = useNavigate();
-  // State variables for form data, errors, submission status, and error message
+  const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     name: '',
     email: '',
-    referralCode: '',
     password: '',
+    referralLink: '',
   });
 
-  // Event handler for form submission
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const referralCode = queryParams.get('referralCode');
+    if (referralCode) {
+      setData(prevData => ({ ...prevData, referralLink: referralCode }));
+    }
+  }, [location.search, setData]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, referralCode, password } = data
+    const { name, email, referralLink, password } = data;
+    setLoading(true);
     try {
-      const {data} = await axios.post("http://localhost:3000/register", {
-        name, email, referralCode, password
-      })
-      if (data.error) {
-        toast.error(data.error)
+      const response = await axios.post("/register", {
+        name, email, referralLink, password
+      });
+      const responseData = response.data;
+      if (responseData.error) {
+        toast.error(responseData.error);
       } else {
-        setData({})
-        toast.success('Registration Successful!')
-        navigate('/login')
+        setData({
+          name: '',
+          email: '',
+          password: '',
+          referralLink: responseData.referralLink
+        });
+        toast.success('Registration Successful!');
+        navigate('/login');
       } 
     } catch (error) {
-      console.log(error)
+      toast.error('An error occurred. Please try again later.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Function to toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  // Return JSX for the SignUp component
   return (
     <div className='Login'>
       <div className='Login-Box'>
@@ -53,12 +66,11 @@ export const SignUp = () => {
             <h2>Register</h2>
             <p>Please enter your details to create an account</p>
           </div>
-          {/* renderAlerts() */}
           <div className='input-box'>
             <VerifiedUserRounded className='icon'/>
             <input
               type='text'
-              name='fullName'
+              name='name'
               value={data.name}
               onChange={(e) => setData({...data, name: e.target.value})}
               required
@@ -80,11 +92,12 @@ export const SignUp = () => {
             <FaceRetouchingNaturalRounded className='icon'/>
             <input
               type='text'
-              name='referralCode'
-              value={data.referralCode}
-              onChange={(e) => setData({...data, referralCode: e.target.value})}
+              name='referralLink'
+              value={data.referralLink}
+              onChange={(e) => setData({...data, referralLink: e.target.value})}
+              readOnly // input read-only
             />
-            <label>Referral code (optional)</label>
+            <label>Referral code {location.search && `(from URL: ${data.referralLink})`}</label>
           </div>
           <div className='input-box'>
             <div onClick={togglePasswordVisibility}>
@@ -99,8 +112,8 @@ export const SignUp = () => {
             />
             <label>Password</label>
           </div>
-          <button type='submit' className="BTN-REG bg-white text-black font-bold py-2 px-4 rounded-full">
-            Register
+          <button type='submit' className={`BTN-REG bg-white text-black font-bold py-2 px-4 rounded-full ${loading ? 'disabled' : ''}`} disabled={loading}>
+            {loading ? 'Registering...' : 'Register'}
           </button>
           <div className='register-link'>
             <p>Already have an account? <Link to="/login">Login</Link></p>
