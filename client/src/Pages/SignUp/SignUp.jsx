@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { EmailRounded, FaceRetouchingNaturalRounded, VerifiedUserRounded, VisibilityOff, Visibility } from '@mui/icons-material';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { EmailRounded, VerifiedUserRounded, VisibilityOff, Visibility } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 import '../Login/LogStyles.css';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -8,47 +8,30 @@ import axios from "axios";
 
 export const SignUp = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     name: '',
     email: '',
-    password: '',
-    referralLink: '',
+    password: ''
   });
-
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const referralCode = queryParams.get('referralCode');
-    if (referralCode) {
-      setData(prevData => ({ ...prevData, referralLink: referralCode }));
-    }
-  }, [location.search, setData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, referralLink, password } = data;
+    const { name, email, password } = data;
     setLoading(true);
     try {
-      const response = await axios.post("/register", {
-        name, email, referralLink, password
-      });
+      const response = await axios.post("/register", { name, email, password });
       const responseData = response.data;
       if (responseData.error) {
         toast.error(responseData.error);
       } else {
-        setData({
-          name: '',
-          email: '',
-          password: '',
-          referralLink: responseData.referralLink
-        });
+        setData({ name: '', email: '', password: '' });
         toast.success('Registration Successful!');
         navigate('/login');
       } 
     } catch (error) {
-      toast.error('An error occurred. Please try again later.');
+      toast.error('An error occurred. Please try again later.', error);
     } finally {
       setLoading(false);
     }
@@ -87,17 +70,6 @@ export const SignUp = () => {
               required
             />
             <label>Email</label>
-          </div>
-          <div className='input-box'>
-            <FaceRetouchingNaturalRounded className='icon'/>
-            <input
-              type='text'
-              name='referralLink'
-              value={data.referralLink}
-              onChange={(e) => setData({...data, referralLink: e.target.value})}
-              readOnly // input read-only
-            />
-            <label>Referral code {location.search && `(from URL: ${data.referralLink})`}</label>
           </div>
           <div className='input-box'>
             <div onClick={togglePasswordVisibility}>

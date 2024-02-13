@@ -1,4 +1,4 @@
-//authControllers.js
+// authControllers.js
 const User = require("../models/Dybit");
 const { hashPassword, comparePassword } = require("../helpers/auth");
 const jwt = require('jsonwebtoken');
@@ -6,19 +6,25 @@ const jwt = require('jsonwebtoken');
 const test = (req, res) => {
    res.json('test is working');
 };
+
 // Generate Referral Link
-const generateReferralLink = async () => {
-    let referralLink;
-    do {
-        const referralCode = Math.random().toString(36).substring(7);
-        referralLink = `http://localhost:3000/register?ref=${referralCode}`;
-        const existingUser = await User.findOne({ referralLink });
-        if (!existingUser) {
-            break;
-        }
-    } while (true);
-    return referralLink;
+const generateReferralLink = async (referralCode) => {
+    if (referralCode) {
+        return `http://localhost:3000/register?ref=${referralCode}`;
+    } else {
+        let referralLink;
+        do {
+            const referralCode = Math.random().toString(36).substring(7);
+            referralLink = `http://localhost:3000/register?ref=${referralCode}`;
+            const existingUser = await User.findOne({ referralCode: null });
+            if (!existingUser) {
+                break;
+            }
+        } while (true);
+        return referralLink;
+    }
 };
+
 
 const registerUser = async (req, res) => {
     try {
@@ -34,13 +40,13 @@ const registerUser = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ error: "Email already exists" });
         }
-        const referralLink = referralCode ? `http://localhost:3000/register?ref=${referralCode}` : await generateReferralLink();
+        const referralLink = await generateReferralLink(referralCode);
         const user = await User.create({
             name,
             email,
             password: hashedPassword,
             referralLink,
-            balance: 0 // user balance is set to zero
+            balance: 0
         });
         return res.status(201).json(user);
     } catch (error) {
@@ -51,7 +57,7 @@ const registerUser = async (req, res) => {
 
 const trackReferral = async (referralCode, referredUserId) => {
     try {
-        const referrer = await User.findOne({ referralCode });
+        const referrer = await User.findOne({ referralLink: `http://localhost:3000/register?ref=${referralCode}` });
         if (referrer) {
             referrer.referredUsers.push(referredUserId);
             await referrer.save();
@@ -63,9 +69,9 @@ const trackReferral = async (referralCode, referredUserId) => {
 
 const rewardReferrer = async (referralCode) => {
     try {
-        const referrer = await User.findOne({ referralCode });
+        const referrer = await User.findOne({ referralLink: `http://localhost:3000/register?ref=${referralCode}` });
         if (referrer) {
-            referrer.balance += 1; // Reward the referrer with $1
+            referrer.balance += 5;
             await referrer.save();
         }
     } catch (error) {
