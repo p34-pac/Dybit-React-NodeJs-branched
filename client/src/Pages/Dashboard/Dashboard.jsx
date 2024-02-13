@@ -1,4 +1,3 @@
-import React from 'react'
 import './Dashboard.css'
 import Navbar from '../../Components/NavBar/Navbar'
 import BottomNavbar from '../../Components/BottomNavbar/BottomNavbar'
@@ -6,7 +5,10 @@ import HeroCards from '../../Components/HeroCards/HeroCards'
 import PriceListStatic from '../../Components/PriceListStatic/PriceListStatic'
 
 
+
+
 function Dashboard() {
+   
   return (
   <div className='Dashboard'>
       <Navbar />

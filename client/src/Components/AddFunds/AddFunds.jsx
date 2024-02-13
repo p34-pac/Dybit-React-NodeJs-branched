@@ -3,6 +3,7 @@ import './AddFunds.css';
 
 
 function AddFunds() {
+
   return (
     <section className='Payment-card-container'>
         <div className='AccountNumber-container'>
@@ -15,7 +16,7 @@ function AddFunds() {
             </div>
         </div>
         <div className='Amount-container'>
-            <span className='Amount-counts'>$15,000:53</span>
+              <span className='Amount-counts'>$0</span>
         </div>
         <div className='AddFunds-Withdraw-btns'>
             <button className='AddFunds'>Add Funds</button>
