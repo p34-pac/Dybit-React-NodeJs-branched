@@ -10,6 +10,7 @@ import ReferralsPage from './Pages/Referrals/ReferralsPage';
 import axios from "axios";
 import {Toaster} from "react-hot-toast"
 import { UserContextProvider } from '../context/userContext';
+import Withdraw from './Pages/Withdraw/Withdraw';
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.withCredentials = true
 
@@ -26,6 +27,7 @@ function App() {
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/tasks" element={<Tasks />} />
+        <Route path="/withdraw" element={<Withdraw />} />
       </Routes>
       </BrowserRouter>
   </UserContextProvider>

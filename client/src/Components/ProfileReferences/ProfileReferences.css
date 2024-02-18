@@ -22,7 +22,7 @@
 .Profile-references>*:not(:first-child){
     margin-top: 10px;
 }
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 450px) {
     .Profile-references{
         width: 90%;
     }
