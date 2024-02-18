@@ -23,3 +23,28 @@ body {
 ::-webkit-scrollbar{
   display: none;
 }
+
+/* remove the default increment and decrement button from input with type number */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number]::-moz-focus-inner {
+  border: 0;
+  box-shadow: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* input outline to none */
+
+input{
+  outline: none;
+
+}
+
