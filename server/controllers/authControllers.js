@@ -7,28 +7,9 @@ const test = (req, res) => {
    res.json('test is working');
 };
 
-// Generate Referral Link
-const generateReferralLink = async (referralCode) => {
-    if (referralCode) {
-        return `http://localhost:3000/register?ref=${referralCode}`;
-    } else {
-        let referralLink;
-        do {
-            const referralCode = Math.random().toString(36).substring(7);
-            referralLink = `http://localhost:3000/register?ref=${referralCode}`;
-            const existingUser = await User.findOne({ referralCode: null });
-            if (!existingUser) {
-                break;
-            }
-        } while (true);
-        return referralLink;
-    }
-};
-
-
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password, referralCode } = req.body;
+        const { name, email, password } = req.body;
         if (!name || !email || !password) {
             return res.status(400).json({ error: "Name, email, and password are required" });
         }
@@ -40,105 +21,80 @@ const registerUser = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ error: "Email already exists" });
         }
-        const referralLink = await generateReferralLink(referralCode);
         const user = await User.create({
             name,
             email,
             password: hashedPassword,
-            referralLink,
             balance: 0
         });
         return res.status(201).json(user);
     } catch (error) {
+        if (error.code === 11000 && error.keyPattern && error.keyPattern.email === 1) {
+            // Duplicate email error
+            return res.status(400).json({ error: "Email already exists" });
+        }
         console.error(error);
-        return res.status(500).json({ error: "Server error" });
+        return res.status(500).json({ error: "Server error during user registration" });
     }
 };
 
-const trackReferral = async (referralCode, referredUserId) => {
-    try {
-        const referrer = await User.findOne({ referralLink: `http://localhost:3000/register?ref=${referralCode}` });
-        if (referrer) {
-            referrer.referredUsers.push(referredUserId);
-            await referrer.save();
-        }
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-const rewardReferrer = async (referralCode) => {
-    try {
-        const referrer = await User.findOne({ referralLink: `http://localhost:3000/register?ref=${referralCode}` });
-        if (referrer) {
-            referrer.balance += 5;
-            await referrer.save();
-        }
-    } catch (error) {
-        console.error(error);
-    }
-};
 
 const loginUser = async (req, res) => {
     try {
-        const { email, password, referralCode } = req.body;
+        const { email, password } = req.body;
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.json({
-                error: "No user found. Please enter the correct email."
+            return res.status(400).json({
+                error: "No user found with this email address."
             });
         }
 
         const match = await comparePassword(password, user.password);
 
-        if (match) {
-            if (referralCode) {
-                await trackReferral(referralCode, user._id);
-                await rewardReferrer(referralCode);
-            }
-
-            jwt.sign({ email: user.email, id: user._id, name: user.name }, process.env.JWT_SECRET, {}, (err, token) => {
-                if (err) throw err;
-                res.cookie('token', token).json(user);
-            });
-        } else {
-            res.json({
-                error: 'Password does not match'
+        if (!match) {
+            return res.status(400).json({
+                error: 'Incorrect password'
             });
         }
+
+        jwt.sign({ email: user.email, id: user._id, name: user.name }, process.env.JWT_SECRET, {}, (err, token) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ error: "Error generating token" });
+            }
+            res.cookie('token', token, { httpOnly: true }).json({ token, user });
+        });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: "Server error" });
+        return res.status(500).json({ error: "Server error during login" });
     }
 };
 
-const getProfile = (req, res) => {
+const getProfile = async (req, res) => {
     const token = req.cookies.token;
     if (!token) {
         return res.status(400).json({ error: "Token is missing" });
     }
-    
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) {
-            console.error("JWT verification error:", err);
+
+    try {
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const userDoc = await User.findById(decodedToken.id);
+        
+        if (!userDoc) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.json(userDoc);
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+        if (error.name === "JsonWebTokenError") {
             return res.status(401).json({ error: "Invalid token" });
         }
-        
-        User.findById(user.id, (err, userDoc) => {
-            if (err) {
-                console.error("Error finding user:", err);
-                return res.status(500).json({ error: "Server error" });
-            }
-            
-            if (!userDoc) {
-                return res.status(404).json({ error: "User not found" });
-            }
-            
-            res.json(userDoc);
-        });
-    });
+        return res.status(500).json({ error: "Server error" });
+    }
 };
+
 
 module.exports = {
     test,

@@ -31,7 +31,7 @@ export const SignUp = () => {
         navigate('/login');
       } 
     } catch (error) {
-      toast.error('An error occurred. Please try again later.', error);
+      toast.error( error?.response?.data?.error);
     } finally {
       setLoading(false);
     }
