@@ -9,35 +9,92 @@ const test = (req, res) => {
 
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
-        if (!name || !email || !password) {
-            return res.status(400).json({ error: "Name, email, and password are required" });
+        const { firstName, middleName, lastName, email, password, referralCode } = req.body;
+
+        // Check if all required fields are provided
+        if (!firstName || !lastName || !email || !password) {
+            return res.status(400).json({ error: "First name, last name, email, and password are required" });
         }
+
+        // Check password length
         if (password.length < 6) {
             return res.status(400).json({ error: "Password should be at least 6 characters long" });
         }
-        const hashedPassword = await hashPassword(password);
+
+        // Generate a unique referral code
+        const generatedReferralCode = await generateUniqueReferralCode();
+
+        // Check if the referral code is provided and valid
+        let referringUser;
+        if (referralCode) {
+            referringUser = await User.findOne({ referralCode });
+            if (!referringUser) {
+                return res.status(400).json({ error: "Referral code is invalid" });
+            }
+        }
+
+        // Check if the email is already registered
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ error: "Email already exists" });
         }
+
+        // Hash the password
+        const hashedPassword = await hashPassword(password);
+
+        // Create the new user
         const user = await User.create({
-            name,
+            firstName,
+            middleName,
+            lastName,
             email,
             password: hashedPassword,
+            referralCode: generatedReferralCode,
+            referee: referringUser ? referringUser._id : null,
             balance: 0
         });
+
+        // If there is a referring user, add $500 to their balance and update referred users list
+        if (referringUser) {
+            referringUser.balance += 500;
+            referringUser.referredUsers.push(user._id); // Add the ID of the new user to referredUsers array
+            await referringUser.save();
+        }
+
         return res.status(201).json(user);
     } catch (error) {
         if (error.code === 11000 && error.keyPattern && error.keyPattern.email === 1) {
             // Duplicate email error
             return res.status(400).json({ error: "Email already exists" });
         }
-        console.error(error);
+        console.error("Error registering user:", error);
         return res.status(500).json({ error: "Server error during user registration" });
     }
 };
 
+// generate a unique referral code
+const generateUniqueReferralCode = async () => {
+    let referralCode;
+    let isCodeUnique = false;
+    while (!isCodeUnique) {
+        referralCode = generateReferralCode();
+        const existingUser = await User.findOne({ referralCode });
+        if (!existingUser) {
+            isCodeUnique = true;
+        }
+    }
+    return referralCode;
+};
+
+// generate a random referral code
+const generateReferralCode = () => {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let referralCode = '';
+    for (let i = 0; i < 8; i++) {
+        referralCode += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return referralCode;
+};
 
 const loginUser = async (req, res) => {
     try {

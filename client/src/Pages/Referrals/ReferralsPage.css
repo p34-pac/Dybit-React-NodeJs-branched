@@ -34,7 +34,7 @@ body{
   height: fit-content;
 }
 .myRefL::before{
-    content: 'My Referral Link: ';
+    content: 'My Referral Code: ';
     font-weight: bolder;
 }
 

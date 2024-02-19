@@ -11,27 +11,30 @@ export const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
-    name: '',
+    firstName: '',
+    middleName: '',
+    lastName: '',
     email: '',
-    password: ''
+    password: '',
+    referralCode: '' 
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, password } = data;
+    const { firstName, middleName, lastName, email, password, referralCode } = data;
     setLoading(true);
     try {
-      const response = await axios.post("/register", { name, email, password });
+      const response = await axios.post("/register", { firstName, middleName, lastName, email, password, referralCode });
       const responseData = response.data;
       if (responseData.error) {
         toast.error(responseData.error);
       } else {
-        setData({ name: '', email: '', password: '' });
+        setData({ firstName: '', middleName: '', lastName: '', email: '', password: '', referralCode: '' }); // Reset referralCode
         toast.success('Registration Successful!');
         navigate('/login');
       } 
     } catch (error) {
-      toast.error( error?.response?.data?.error);
+      toast.error(error?.response?.data?.error);
     } finally {
       setLoading(false);
     }
@@ -53,12 +56,33 @@ export const SignUp = () => {
             <VerifiedUserRounded className='icon'/>
             <input
               type='text'
-              name='name'
-              value={data.name}
-              onChange={(e) => setData({...data, name: e.target.value})}
+              name='firstName'
+              value={data.firstName}
+              onChange={(e) => setData({...data, firstName: e.target.value})}
               required
             />
-            <label>Full Name</label>
+            <label>First Name</label>
+          </div>
+          <div className='input-box'>
+            <VerifiedUserRounded className='icon'/>
+            <input
+              type='text'
+              name='middleName'
+              value={data.middleName}
+              onChange={(e) => setData({ ...data, middleName: e.target.value })}
+            />
+            <label>Middle Name</label>
+          </div>
+          <div className='input-box'>
+            <VerifiedUserRounded className='icon'/>
+            <input
+              type='text'
+              name='lastName'
+              value={data.lastName}
+              onChange={(e) => setData({...data, lastName: e.target.value})}
+              required
+            />
+            <label>Last Name</label>
           </div>
           <div className='input-box'>
             <EmailRounded className='icon'/>
@@ -83,6 +107,16 @@ export const SignUp = () => {
               required
             />
             <label>Password</label>
+          </div>
+          <div className='input-box'>
+            <VerifiedUserRounded className='icon'/>
+            <input
+              type='text'
+              name='referralCode'
+              value={data.referralCode}
+              onChange={(e) => setData({...data, referralCode: e.target.value})}
+            />
+            <label>Referral Code (optional)</label>
           </div>
           <button type='submit' className={`BTN-REG bg-white text-black font-bold py-2 px-4 rounded-full ${loading ? 'disabled' : ''}`} disabled={loading}>
             {loading ? 'Registering...' : 'Register'}

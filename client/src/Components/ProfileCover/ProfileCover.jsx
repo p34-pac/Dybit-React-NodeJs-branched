@@ -21,7 +21,7 @@ function ProfileCover() {
                 <div className='info-context'>
                 {user ? (
                 <React.Fragment>
-                   <b className='userName'>Hi, {user.name}</b>
+                   <b className='userName'>Hi, {user.firstName}</b>
                    <b className='userEmail'>{user.email}</b>
                 </React.Fragment>
                 ) : (
