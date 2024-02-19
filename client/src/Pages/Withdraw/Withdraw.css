@@ -1,0 +1,261 @@
+.top-section{
+    width: 100%;
+    height: fit-content;
+    border-top: 2px solid #e6c918;
+    background-color: #e6c918;
+    padding: 10px 0;
+}
+.top-section nav{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    margin-top: 10px;
+}
+.top-section h1{
+    width: fit-content;
+    height: fit-content;
+    padding: 2px 10px;
+    margin-left: 10px;
+    font-weight: 500;
+    font-size: 17px;
+}
+
+.top-section nav button{
+    width: fit-content;
+    height: fit-content;
+    background-color: #000;
+    padding: 5px 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+}
+
+
+.top-section .prompt {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.top-section .prompt p{
+    width: fit-content;
+    height: fit-content;
+    max-width: calc(100% - 100px);
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.top-section .prompt p i{
+    font-size: larger;
+    font-weight: 400;
+    font-style: normal;
+}
+.top-section .prompt p .icon{
+    width: 30px;
+    height: 30px;
+}
+.icon .a {
+    fill:none;
+    stroke:#000000;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+.top-section .prompt .ICN-wdraw{
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+.ICN-wdraw svg{
+    width: 100%;
+    height: 100%;
+}
+
+main{
+    width: 100%;
+    height: fit-content;
+}
+main .withdrawal-amount{
+    width: 85%;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 10px;
+}
+.section-top{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.ST-blnc::before{
+    content: 'balance: ';
+    text-transform: uppercase;
+    color: #303030;
+    font-weight: bolder;
+}
+.withdrawal-amount .input{
+    width: 100%;
+    height: fit-content;
+    border: 2px solid #e6c918;
+    background-color: #e6c918;
+    border-radius: 5px;
+    padding: 10px;
+}
+.input input{
+    width: 100%;
+    height: fit-content;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 2px solid #e6cb18a4;
+    background-color: white;
+    font-size: 17px;
+    outline: none;
+    font-weight: 500;
+}
+
+main form.bank-info {
+    width: 100%;
+    height: fit-content;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #e6c918;
+    padding: 30px 0;
+}
+.bank-info label{
+    width: 98%;
+    height: fit-content;
+}
+.bank-info > *:not(:first-child){
+    margin-top: 20px;
+}
+.bank-info label::before{
+    display: block;
+    font-weight: 500;
+    margin-bottom: 10px !important;
+}
+.bank-info label[for=bank-name]::before{
+    content: 'select your bank';
+    text-transform: uppercase;
+}
+.bank-info label[for=account-number]::before{
+    content: 'enter account number';
+    text-transform: uppercase;
+}
+.bank-info label[for=account-name]::before{
+    content: 'enter account name';
+    text-transform: uppercase;
+}
+.bank-info label > input{
+    width: 100%;
+    height: fit-content;
+    padding: 10px 10px;
+    border-radius: 10px;
+}
+
+.bank-info button{
+    width: 98%;
+    height: fit-content;
+    padding: 10px 0;
+    border-radius: 10px;
+    background-color: #000;
+    color: white;
+}
+
+
+/* input search */
+    .search{
+        width: 100%;
+        height: fit-content;
+        padding: 10px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    input[type=search]{
+        width: 100%;
+        height: fit-content;
+        border-bottom: 2px solid #6c7275;
+        padding: 10px;
+    }
+    .not-found {
+      width: 100%;
+      height: fit-content;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin-top: 20px;
+    }
+    .ICN-cancel{
+        display: block;
+        width: 30px;
+        height: 30px;
+        margin-bottom: 10px;
+    }
+    .ICN-cancel svg{
+        width: 100%;
+        height: 100%;
+    }
+    .cls-1{
+        fill:none;
+        stroke:#000000;
+        stroke-linecap:round;
+        stroke-linejoin:round;
+        stroke-width:20px;
+    }
+/* ----------------- */
+
+@media screen and (max-width: 510px) {
+    .top-section .prompt p i{
+        font-size: 3.5dvw;
+    }
+}
+@media screen and (max-width: 400px) {
+    .top-section .prompt p i{
+        font-size: 12px;
+    }
+    .section-top b{
+        font-size: 4dvw;
+    }
+}
+@media screen and (max-width: 300px) {
+    .top-section .prompt{
+        width: 100%;
+        flex-direction: column-reverse;
+    }
+
+    .top-section .prompt p{
+        width: 100% !important;
+        height: fit-content;
+        max-width: 100%;
+        margin-left: 0;
+        flex-direction: column;
+        padding: 0;
+        justify-content: center;
+        align-items: center;
+    }
+    .top-section .prompt p i{
+        width: 98%;
+        padding: 0;
+        font-size: 17px;
+    }
+    
+}
+

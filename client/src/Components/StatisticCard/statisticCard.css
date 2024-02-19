@@ -34,10 +34,12 @@
         max-width: fit-content;
     }
 }
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 450px) {
     .statistic-card{
         font-size: 15px;
-        max-width: 100%;
+        max-width: 100% ;
+        margin-left: 0 !important;
+        margin-top: 10px;
         width: 100%;
     }
 }
