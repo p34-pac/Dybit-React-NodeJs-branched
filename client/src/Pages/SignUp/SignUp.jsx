@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { EmailRounded, VerifiedUserRounded, VisibilityOff, Visibility } from '@mui/icons-material';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
-import { VscReferences } from "react-icons/vsc";
+import { FaShareNodes } from "react-icons/fa6";
 import { Link } from 'react-router-dom';
 import '../Login/LogStyles.css';
 import toast from 'react-hot-toast';
@@ -112,7 +112,7 @@ export const SignUp = () => {
             <label>Password</label>
           </div>
           <div className='input-box'>
-            <VscReferences className='icon'/>
+            <FaShareNodes className='icon'/>
             <input
               type='text'
               name='referralCode'

@@ -20,7 +20,6 @@ function ProfileNav() {
         </div>
           <div className='balance'>
               {user ? (<b>₦{user.balance}</b>) :(<b>Loading...</b>)}
-            {/* added balance hider, this can be converted to it's own component, cause of repetition */}
             <div className='Balance-hider'>
                   <AccountBalanceWalletIcon className='Hider-btn'/>
             </div>
