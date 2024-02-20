@@ -29,7 +29,7 @@ function AddFunds() {
                 </div>
             </div>
             <div className='Amount-container'>
-                {user && (showBalance ? <span className='Amount-counts'>${user.balance}</span> : <b className='Stars'>*****</b>)}
+                {user && (showBalance ? <span className='Amount-counts'>₦{user.balance}</span> : <b className='Stars'>*****</b>)}
             </div>
             <div className='AddFunds-Withdraw-btns'>
                 <button className='AddFunds'>Add Funds</button>

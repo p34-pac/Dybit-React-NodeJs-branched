@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import './Referrals.css'
 import { FaTrophy } from 'react-icons/fa'
 import { People } from '@mui/icons-material'
 import { UserContext } from '../../../context/userContext';
+// import toast from 'react-hot-toast';
 
 function Referrals() {
     const { user, fetchUser } = useContext(UserContext);

@@ -81,6 +81,7 @@ body{
     height: fit-content;
     margin-right: 10px;
 }
+
 .members-tbl .heading .bf-total-Ref::before{
     content: 'Total referrals: ';
     font-weight: bolder;
@@ -165,6 +166,7 @@ body{
     .copy-sect .link-txt {
 
         font-size: 3dvw;
+        font-weight: 600;
     }
     .copy-sect .copy-link {
        font-size: 3dvw;

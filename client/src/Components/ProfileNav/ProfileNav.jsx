@@ -1,8 +1,13 @@
-/* eslint-disable no-unused-vars */
-import React from 'react'
+import React, { useContext, useEffect } from 'react';
 import './ProfileNav.css'
+import { UserContext } from '../../../context/userContext';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 
 function ProfileNav() {
+    const { user, fetchUser } = useContext(UserContext);
+    useEffect(() => {
+        fetchUser();
+    }, []);
   return (
     <div className='profile-nav'>
         <div className='tier-btn'>
@@ -13,11 +18,11 @@ function ProfileNav() {
                 <path d="M9.75 4.5L14.25 9" stroke="#000000" strokeWidth="1.125" strokeLinecap="round" strokeLinejoin="round"></path>
             </svg>
         </div>
-        <div className='balance'>
-            <b>$15,000:53</b>
+          <div className='balance'>
+              {user ? (<b>₦{user.balance}</b>) :(<b>Loading...</b>)}
             {/* added balance hider, this can be converted to it's own component, cause of repetition */}
             <div className='Balance-hider'>
-                <button className='Hider-btn'>Hide Balance</button>
+                  <AccountBalanceWalletIcon className='Hider-btn'/>
             </div>
         </div>
     </div>

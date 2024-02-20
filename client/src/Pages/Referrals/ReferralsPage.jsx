@@ -4,6 +4,7 @@ import BottomNavBar from "../../Components/BottomNavbar/BottomNavbar";
 import React, { useContext, useEffect } from 'react';
 import { UserContext } from "../../../context/userContext";
 import { FaUser } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 function ReferralsPage() {
   const { user, fetchUser } = useContext(UserContext);
@@ -19,7 +20,7 @@ function ReferralsPage() {
     .then(()=>{
       navigator.clipboard.readText()
       .then(txt => {
-        alert("copied:" + txt)
+        toast.success("Copied to clipboard: " + " " + txt)
       })
     })
   }
@@ -65,7 +66,7 @@ function ReferralsPage() {
             id="RefL"
            >Loading...</span>)}
 
-          <button className="copy-link" onClick={()=>copyToClip(refL)}>copy link</button>
+          <button className="copy-link" onClick={()=>copyToClip(user.referralCode)}>Copy Code</button>
 
         </div>
       </section>
@@ -79,8 +80,8 @@ function ReferralsPage() {
           <table className="members-tbl-grid">
             <thead>
               <tr>
-                <th>Member</th>
-                <th>interest</th>
+                <th className='text-align-left'>Member</th>
+                <th>Rewards</th>
               </tr>
             </thead>
             <tbody>
@@ -91,7 +92,7 @@ function ReferralsPage() {
                 </span>
                   Useridentification
                 </td>
-                <td>2.5%</td>
+                <td>₦500</td>
               </tr>
             </tbody>
           </table>
