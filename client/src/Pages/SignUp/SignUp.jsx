@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { EmailRounded, VerifiedUserRounded, VisibilityOff, Visibility } from '@mui/icons-material';
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
+import { VscReferences } from "react-icons/vsc";
 import { Link } from 'react-router-dom';
 import '../Login/LogStyles.css';
 import toast from 'react-hot-toast';
@@ -53,7 +56,7 @@ export const SignUp = () => {
             <p>Please enter your details to create an account</p>
           </div>
           <div className='input-box'>
-            <VerifiedUserRounded className='icon'/>
+            <PermIdentityIcon className='icon'/>
             <input
               type='text'
               name='firstName'
@@ -74,7 +77,7 @@ export const SignUp = () => {
             <label>Middle Name</label>
           </div>
           <div className='input-box'>
-            <VerifiedUserRounded className='icon'/>
+            <FamilyRestroomIcon className='icon'/>
             <input
               type='text'
               name='lastName'
@@ -109,7 +112,7 @@ export const SignUp = () => {
             <label>Password</label>
           </div>
           <div className='input-box'>
-            <VerifiedUserRounded className='icon'/>
+            <VscReferences className='icon'/>
             <input
               type='text'
               name='referralCode'

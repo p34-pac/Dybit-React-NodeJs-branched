@@ -3,7 +3,7 @@ import './Referrals.css'
 import { FaTrophy } from 'react-icons/fa'
 import { People } from '@mui/icons-material'
 import { UserContext } from '../../../context/userContext';
-// import toast from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 function Referrals() {
     const { user, fetchUser } = useContext(UserContext);
@@ -12,7 +12,15 @@ function Referrals() {
         fetchUser();
     }, []); 
 
-
+    function copyToClip(textToCopy){
+        navigator.clipboard.writeText(textToCopy)
+        .then(()=>{
+          navigator.clipboard.readText()
+          .then(txt => {
+            toast.success("Copied to clipboard: " + " " + txt)
+          })
+        })
+      }
   return (
       <section className='Referrals-counts-container'>
           <div className='Row'>
@@ -31,7 +39,7 @@ function Referrals() {
             </div>
             <div className='ReferBtn-container'>
                 <span>Refer more to earn more.</span>
-                <button className='Refer-btn'>Copy Link</button>
+                <button className='Refer-btn' onClick={()=>copyToClip(user.referralCode)}>Copy Code</button>
             </div>
       </section>
   )

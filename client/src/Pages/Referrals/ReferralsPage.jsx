@@ -13,8 +13,6 @@ function ReferralsPage() {
     fetchUser();
 }, []); 
 
-  // the state above can be changed to the user's referral link
-
   function copyToClip(textToCopy){
     navigator.clipboard.writeText(textToCopy)
     .then(()=>{
