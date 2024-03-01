@@ -19,20 +19,21 @@ export const SignUp = () => {
     lastName: '',
     email: '',
     password: '',
-    referralCode: '' 
+    referralCode: '',
+    phoneNumber: '' // New field for phone number
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { firstName, middleName, lastName, email, password, referralCode } = data;
+    const { firstName, middleName, lastName, email, password, referralCode, phoneNumber } = data;
     setLoading(true);
     try {
-      const response = await axios.post("/register", { firstName, middleName, lastName, email, password, referralCode });
+      const response = await axios.post("/register", { firstName, middleName, lastName, email, password, referralCode, phoneNumber });
       const responseData = response.data;
       if (responseData.error) {
         toast.error(responseData.error);
       } else {
-        setData({ firstName: '', middleName: '', lastName: '', email: '', password: '', referralCode: '' }); // Reset referralCode
+        setData({ firstName: '', middleName: '', lastName: '', email: '', password: '', referralCode: '', phoneNumber: '' }); // Reset phoneNumber and referralCode
         toast.success('Registration Successful!');
         navigate('/login');
       } 
@@ -66,16 +67,7 @@ export const SignUp = () => {
             />
             <label>First Name</label>
           </div>
-          <div className='input-box'>
-            <VerifiedUserRounded className='icon'/>
-            <input
-              type='text'
-              name='middleName'
-              value={data.middleName}
-              onChange={(e) => setData({ ...data, middleName: e.target.value })}
-            />
-            <label>Middle Name</label>
-          </div>
+          {/* Similar input boxes for middleName and lastName */}
           <div className='input-box'>
             <FamilyRestroomIcon className='icon'/>
             <input
@@ -120,6 +112,17 @@ export const SignUp = () => {
               onChange={(e) => setData({...data, referralCode: e.target.value})}
             />
             <label>Referral Code (optional)</label>
+          </div>
+          {/* New input box for phone number */}
+          <div className='input-box'>
+            <FaShareNodes className='icon'/>
+            <input
+              type='text'
+              name='phoneNumber'
+              value={data.phoneNumber}
+              onChange={(e) => setData({...data, phoneNumber: e.target.value})}
+            />
+            <label>Phone Number</label>
           </div>
           <button type='submit' className={`BTN-REG bg-white text-black font-bold py-2 px-4 rounded-full ${loading ? 'disabled' : ''}`} disabled={loading}>
             {loading ? 'Registering...' : 'Register'}

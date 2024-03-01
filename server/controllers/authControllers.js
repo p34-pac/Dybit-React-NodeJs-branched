@@ -4,12 +4,12 @@ const { hashPassword, comparePassword } = require("../helpers/auth");
 const jwt = require('jsonwebtoken');
 
 const test = (req, res) => {
-   res.json('test is working');
+    res.json('test is working');
 };
 
 const registerUser = async (req, res) => {
     try {
-        const { firstName, middleName, lastName, email, password, referralCode } = req.body;
+        const { firstName, lastName, email, password, referralCode, phoneNumber } = req.body;
 
         // Check if all required fields are provided
         if (!firstName || !lastName || !email || !password) {
@@ -45,7 +45,7 @@ const registerUser = async (req, res) => {
         // Create the new user
         const user = await User.create({
             firstName,
-            middleName,
+            phoneNumber,
             lastName,
             email,
             password: hashedPassword,
@@ -115,12 +115,26 @@ const loginUser = async (req, res) => {
             });
         }
 
+        // Generate JWT token
         jwt.sign({ email: user.email, id: user._id, name: user.name }, process.env.JWT_SECRET, {}, (err, token) => {
             if (err) {
                 console.error(err);
                 return res.status(500).json({ error: "Error generating token" });
             }
-            res.cookie('token', token, { httpOnly: true }).json({ token, user });
+
+            // Include user's balance in the response
+            const responseData = {
+                token,
+                user: {
+                    _id: user._id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    balance: user.balance // Include user's balance here
+                }
+            };
+
+            res.cookie('token', token, { httpOnly: true }).json(responseData);
         });
     } catch (error) {
         console.error(error);
