@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function PaymentForm({ onAddFunds, onWithdrawFunds }) {
+  const location = useLocation();
   const [amount, setAmount] = useState(0);
 
   const handleAddFunds = () => {
@@ -29,10 +31,10 @@ function PaymentForm({ onAddFunds, onWithdrawFunds }) {
         onChange={(e) => setAmount(Number(e.target.value))}
         className="border rounded p-2 w-1/2"
       />
-      <button onClick={handleAddFunds} className="bg-blue-500 text-white px-4 py-2 rounded">
+      <button onClick={handleAddFunds} className={`bg-red-500 text-white px-4 py-2 rounded ${location.pathname.includes("deposit") ? 'active' : ''}`}>
         Add Funds
       </button>
-      <button onClick={handleWithdrawFunds} className="bg-red-500 text-white px-4 py-2 rounded">
+      <button onClick={handleWithdrawFunds} className={`bg-red-500 text-white px-4 py-2 rounded ${location.pathname.includes("withdraw") ? 'active' : ''}`}>
         Withdraw Funds
       </button>
     </div>

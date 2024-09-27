@@ -11,14 +11,6 @@ function Home() {
 
       <section className='access'>
         <div className='access-btn'>
-          <a href='#'>
-            <button className='signup-btn'>Sign Up</button>
-          </a>
-        </div>
-        <div className='access-btn'>
-          <a href='#'>
-            <button className='signin-btn'>Sign In</button>
-          </a>
           <Link to="/register">
             <button className='signup-btn'>Sign Up</button>
           </Link>

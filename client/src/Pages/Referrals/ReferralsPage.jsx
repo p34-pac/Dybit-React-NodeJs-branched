@@ -1,27 +1,29 @@
-/* eslint-disable no-unused-vars */
-import React from "react";
 import './ReferralsPage.css'
 import Navbar from "../../Components/NavBar/Navbar";
 import BottomNavBar from "../../Components/BottomNavbar/BottomNavbar";
-import { useState } from "react";
-import { json } from "react-router-dom";
+import React, { useContext, useEffect } from 'react';
+import { UserContext } from "../../../context/userContext";
+import { FaUser } from 'react-icons/fa';
+import toast from 'react-hot-toast';
 
 function ReferralsPage() {
-  const [refL] = useState("https://users-referral-link")
+  const { user, fetchUser } = useContext(UserContext);
 
-  // the state above can be changed to the user's referral link
+  useEffect(() => {
+    fetchUser();
+}, []); 
 
   function copyToClip(textToCopy){
     navigator.clipboard.writeText(textToCopy)
     .then(()=>{
       navigator.clipboard.readText()
       .then(txt => {
-        alert("copied:" + txt)
+        toast.success("Copied to clipboard: " + " " + txt)
       })
     })
   }
   return (
-    <>
+    <div>
       <Navbar />
       <section className="referral-link">
         <i className="ICN-ref">
@@ -52,12 +54,17 @@ function ReferralsPage() {
           </svg>
         </i>
         <div className="copy-sect">
-          <span
-           className="link-txt myRefL"
-           id="RefL"
-           >{refL}</span>
+          {user ? (<span
+            className="link-txt myRefL"
+            id="RefL"
+           >
+             {user.referralCode}
+           </span>) : (<span
+            className="link-txt myRefL"
+            id="RefL"
+           >Loading...</span>)}
 
-          <button className="copy-link" onClick={()=>copyToClip(refL)}>copy link</button>
+          <button className="copy-link" onClick={()=>copyToClip(user.referralCode)}>Copy Code</button>
 
         </div>
       </section>
@@ -66,40 +73,31 @@ function ReferralsPage() {
         <div className="members-tbl">
           <div className="heading">
             <h1>Members</h1>
-            <span className="bf-total-Ref">2</span>
+            {user ? (<span className="bf-total-Ref">{user.__v}</span>) : (<span className="bf-total-Ref">Loading...</span>)}
           </div>
           <table className="members-tbl-grid">
             <thead>
               <tr>
-                <th>Member</th>
-                <th>interest</th>
+                <th className='text-align-left'>Member</th>
+                <th>Rewards</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>
-                  <span className="member-prof-img">
-                  <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 448 512" className="User-Toggler" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path>
-                  </svg>
-                  </span>
+                <span className="member-prof-img">
+                    <FaUser className="User-Toggler"/>
+                </span>
                   Useridentification
                 </td>
-                <td>2.5%</td>
-              </tr>
-              <tr>
-                <td>
-                  <span className="member-prof-img"></span>
-                  Useridentification
-                </td>
-                <td>2.5%</td>
+                <td>₦500</td>
               </tr>
             </tbody>
           </table>
         </div>
       </main>
       <BottomNavBar />
-    </>
+    </div>
   );
 }
 

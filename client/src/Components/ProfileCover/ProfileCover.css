@@ -44,14 +44,14 @@
     align-items: flex-start;
     justify-content: center;
     flex-direction: column;
-    gap: 30px;
+    gap: 10px;
 }
 .info-context>b.userName{
-    font-size: 20px;
+    font-size: 18px;
     color: var(--primary-text-color);
 }
 .info-context>b.userEmail{
-    font-size: 15px;
+    font-size: 13px;
     color: var(--primary-text-color);
     
 }

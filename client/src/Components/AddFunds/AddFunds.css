@@ -49,6 +49,10 @@
     font-size: 30px;
     font-weight: 600;
 }
+.Stars{
+    font-size: 40px;
+    font-weight: 600;
+}
 .AddFunds-Withdraw-btns{
     display: flex;
     justify-content: space-between;
